@@ -1,0 +1,94 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "configure debug",
+            "type": "process",
+            "command": "cmake",
+            "args": [
+                "-S",
+                ".",
+                "-B",
+                "build",
+                "-DCMAKE_BUILD_TYPE=Debug",
+                "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+            ],
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "build debug",
+            "type": "process",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build",
+                "--config",
+                "Debug"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "dependsOn": "configure debug"
+        },
+        {
+            "label": "configure release",
+            "type": "process",
+            "command": "cmake",
+            "args": [
+                "-S",
+                ".",
+                "-B",
+                "build",
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+            ],
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "build release",
+            "type": "process",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build",
+                "--config",
+                "Release"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "clean rebuild",
+            "type": "shell",
+            "command": "rm -rf build && cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && cmake --build build",
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "create dist",
+            "type": "shell",
+            "command": "rm -rf dist && mkdir -p dist && cp build/${workspaceFolderBasename} dist/ && cp /usr/local/lib/libraylib.so* dist/ 2>/dev/null || true",
+            "group": "build",
+            "problemMatcher": [],
+            "dependsOn": "build release"
+        },
+        {
+            "label": "run",
+            "type": "shell",
+            "command": "./build/${workspaceFolderBasename}",
+            "group": "test",
+            "problemMatcher": [],
+            "dependsOn": "build debug"
+        }
+    ]
+}

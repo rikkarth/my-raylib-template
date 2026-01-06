@@ -1,0 +1,12 @@
+*.exe
+*.dsym
+main
+  
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+build/
+.cache/
+dist/
